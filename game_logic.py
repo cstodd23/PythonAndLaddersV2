@@ -45,7 +45,7 @@ class GameState(Enum):
 
 
 class DisplayedGame:
-    def __init__(self, rng_seed=None, fps=60):
+    def __init__(self, rng_seed: int = None, fps: int = 60):
         pygame.init()
         pygame.font.init()
 

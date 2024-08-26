@@ -9,13 +9,13 @@ file_name = os.path.basename(file_path)
 
 class GameBoard:
     def __init__(self,
-                 x_board=10,
-                 y_board=10,
-                 snake_amount=10,
-                 snake_end_min=1,
-                 ladder_amount=10,
-                 ladder_start_min=5,
-                 rng=None):
+                 x_board: int = 10,
+                 y_board: int = 10,
+                 snake_amount: int = 10,
+                 snake_end_min: int = 1,
+                 ladder_amount: int = 10,
+                 ladder_start_min: int = 5,
+                 rng_seed: int = None):
 
         self.x_board = x_board
         self.y_board = y_board
@@ -24,7 +24,8 @@ class GameBoard:
         self.ladder_amount = ladder_amount
         self.ladder_start_min = ladder_start_min
 
-        self.rng = rng if rng is not None else np.random.default_rng()
+        self.rng_seed = rng_seed
+        self.rng = np.random.default_rng(self.rng_seed) if self.rng_seed is not None else np.random.default_rng()
 
         self.snakes = []
         self.ladders = []
@@ -37,7 +38,7 @@ class GameBoard:
         self.generate_snakes()
         self.generate_ladders()
 
-    def generate_snakes(self, min_length=3):
+    def generate_snakes(self, min_length: int = 3):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         while len(self.snakes) < self.snake_amount:
             snake_start = self.rng.integers(self.snake_end_min + min_length + 1, self.snake_start_max)
@@ -46,7 +47,7 @@ class GameBoard:
                 self.snakes.append((snake_start, snake_end))
                 logger.info(f"Generated Snake from {snake_start} to {snake_end}")
 
-    def generate_ladders(self, min_length=3):
+    def generate_ladders(self, min_length: int = 3):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         while len(self.ladders) < self.ladder_amount:
             ladder_start = self.rng.integers(self.ladder_start_min, self.ladder_end_max - min_length - 1)
@@ -55,7 +56,7 @@ class GameBoard:
                 self.ladders.append((ladder_start, ladder_end))
                 logger.info(f'Generated Ladder from {ladder_start} to {ladder_end}')
 
-    def check_duplicates(self, numbers_to_check):
+    def check_duplicates(self, numbers_to_check: tuple):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         if self.snakes:
             for segment in self.snakes:
@@ -67,7 +68,7 @@ class GameBoard:
                     return True
         return False
 
-    def check_snakes_ladders(self, square):
+    def check_snakes_ladders(self, square: int):
         """
         Parameters:
         Square (int): Square to be checked for starting a snake or ladder
