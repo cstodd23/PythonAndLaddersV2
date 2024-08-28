@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39473745-621f-4839-b0f2-d6c2c62bf72b" name="Changes" comment="Button Revamped">
-      <change beforePath="$PROJECT_DIR$/.idea/PythonAndLaddersv2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonAndLaddersv2.iml" afterDir="false" />
+    <list default="true" id="39473745-621f-4839-b0f2-d6c2c62bf72b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_board_display.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_board_display.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
@@ -52,6 +51,7 @@
   "keyToString": {
     "Python.board_display.executor": "Run",
     "Python.game_board.executor": "Run",
+    "Python.game_board_display.executor": "Run",
     "Python.game_logic.executor": "Run",
     "Python.main.executor": "Run",
     "Python.tests.executor": "Run",
@@ -90,11 +90,20 @@
       <option name="project" value="LOCAL" />
       <updated>1724716458209</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Displaying Board Squares with test scripts to show board&#10;Also animated the board creation with test scripts">
+      <option name="closed" value="true" />
+      <created>1724790276577</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1724790276577</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Button Revamped" />
-    <option name="LAST_COMMIT_MESSAGE" value="Button Revamped" />
+    <MESSAGE value="Displaying Board Squares with test scripts to show board&#10;Also animated the board creation with test scripts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Displaying Board Squares with test scripts to show board&#10;Also animated the board creation with test scripts" />
   </component>
 </project>

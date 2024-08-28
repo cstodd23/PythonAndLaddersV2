@@ -1,8 +1,11 @@
 import game_board
 from button import Button
 from game_board_display import DisplayBoard
+from game_board import GameBoard
+from typing import Iterator
 import pygame
 from colors import GameColors
+from logger_setup import func_logger, logger
 
 
 def test_check_snakes_ladders():
@@ -69,12 +72,13 @@ def test_display_board():
     pygame.quit()
 
 
-def test_display_board_animation():
+def square_animation_test():
     pygame.init()
     clock = pygame.time.Clock()
     window = pygame.display.set_mode((1500, 1500))
+    board = GameBoard()
 
-    display_board = DisplayBoard(10, 10, window)
+    display_board = DisplayBoard(board, window)
     display_board.generate_board_squares()
 
     draw_generator = display_board.draw_board_animated()
@@ -101,7 +105,53 @@ def test_display_board_animation():
     pygame.quit()
 
 
+def chain_generators(*generators: Iterator[tuple[str, bool]]) -> Iterator[tuple[str, bool]]:
+    logger.debug(f"Currently in chain_generators function")
+    for gen in generators:
+        yield from gen
+
+
+def square_mover_animation_test():
+    pygame.init()
+    clock = pygame.time.Clock()
+
+    window = pygame.display.set_mode((1500, 1500))
+    board = GameBoard()
+
+    display_board = DisplayBoard(board, window)
+    display_board.generate_board_squares()
+
+    combined_animation = chain_generators(
+        display_board.draw_board_animated(),
+        display_board.draw_ladders(),
+        display_board.draw_snakes()
+    )
+
+    pygame.time.set_timer(pygame.USEREVENT, 20)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.USEREVENT:
+                try:
+                    current_animation, is_complete = next(combined_animation)
+                    if is_complete:
+                        logger.info(f'{current_animation} animation completed')
+                except StopIteration:
+                    pygame.time.set_timer(pygame.USEREVENT, 0)
+
+        display_board.draw_to_window()
+        pygame.display.flip()
+
+        clock.tick(60)
+
+    pygame.quit()
+
+
 if __name__ == "__main__":
     # test_display_board()
     # test_button_functionality()
-    test_display_board_animation()
+    # square_animation_test()
+    square_mover_animation_test()
