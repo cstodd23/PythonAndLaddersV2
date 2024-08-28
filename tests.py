@@ -7,6 +7,8 @@ import pygame
 from colors import GameColors
 from logger_setup import func_logger, logger
 
+ANIMATION_TIME = 10
+
 
 def test_check_snakes_ladders():
     game = game_board.GameBoard()
@@ -83,7 +85,7 @@ def square_animation_test():
 
     draw_generator = display_board.draw_board_animated()
 
-    pygame.time.set_timer(pygame.USEREVENT, 20)
+    pygame.time.set_timer(pygame.USEREVENT, ANIMATION_TIME)
 
     running = True
     while running:
@@ -127,7 +129,7 @@ def square_mover_animation_test():
         display_board.draw_snakes()
     )
 
-    pygame.time.set_timer(pygame.USEREVENT, 20)
+    pygame.time.set_timer(pygame.USEREVENT, ANIMATION_TIME)
 
     running = True
     while running:
@@ -150,8 +152,89 @@ def square_mover_animation_test():
     pygame.quit()
 
 
+def start_square_mover_animation_test():
+    pygame.init()
+    clock = pygame.time.Clock()
+
+    window = pygame.display.set_mode((1500, 1500))
+    board = GameBoard()
+
+    display_board = DisplayBoard(board, window)
+    display_board.generate_start_squares()
+    display_board.generate_board_squares()
+
+    combined_animation = chain_generators(
+        display_board.draw_start_animated(),
+        display_board.draw_board_animated(),
+        display_board.draw_ladders(),
+        display_board.draw_snakes()
+    )
+
+    pygame.time.set_timer(pygame.USEREVENT, ANIMATION_TIME)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.USEREVENT:
+                try:
+                    current_animation, is_complete = next(combined_animation)
+                    if is_complete:
+                        logger.info(f'{current_animation} animation completed')
+                except StopIteration:
+                    pygame.time.set_timer(pygame.USEREVENT, 0)
+
+        display_board.draw_to_window()
+        pygame.display.flip()
+
+        clock.tick(60)
+
+    pygame.quit()
+
+def start_animation():
+    pygame.init()
+    clock = pygame.time.Clock()
+
+    window = pygame.display.set_mode((1500, 1500))
+    board = GameBoard()
+
+    display_board = DisplayBoard(board, window)
+    display_board.generate_start_squares()
+    display_board.generate_board_squares()
+
+    combined_animation = chain_generators(
+        display_board.draw_start_animated()
+    )
+
+    pygame.time.set_timer(pygame.USEREVENT, ANIMATION_TIME)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.USEREVENT:
+                try:
+                    current_animation, is_complete = next(combined_animation)
+                    if is_complete:
+                        logger.info(f'{current_animation} animation completed')
+                except StopIteration:
+                    pygame.time.set_timer(pygame.USEREVENT, 0)
+
+        display_board.draw_to_window()
+        pygame.display.flip()
+
+        clock.tick(60)
+
+    pygame.quit()
+
+
+
 if __name__ == "__main__":
     # test_display_board()
     # test_button_functionality()
     # square_animation_test()
-    square_mover_animation_test()
+    # square_mover_animation_test()
+    start_square_mover_animation_test()
+    # start_animation()

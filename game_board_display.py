@@ -16,6 +16,7 @@ class DisplayBoard:
     def __init__(self,
                  game_board: GameBoard,
                  window: pygame.display,
+                 num_players: int = 4,
                  border_squares: float = 1.5
                  ):
         self.game_board = game_board
@@ -26,10 +27,15 @@ class DisplayBoard:
         self.window_width, self.window_height = window.get_size()
         self.game_area = pygame.Surface((self.window_width, self.window_height))
 
+        self.num_players = num_players
+
         self.border_squares = border_squares
 
         self.square_size = self.calculate_square_size()
         self.border_size = self.square_size * border_squares
+
+        self.start_rects = {}
+        self.start_colors = {}
 
         self.square_rects = {}
         self.square_colors = {}
@@ -37,14 +43,7 @@ class DisplayBoard:
         self.arrow_head_length = 30
         self.arrow_head_angle = 0.5
 
-        self.ladder_color = GameColors.HOOKER_GREEN.value
-        self.snake_color = GameColors.REDWOOD.value
-
         self.font = pygame.font.Font(None, 36)
-
-        self.animate_squares_complete = False
-        self.animate_ladders_complete = None
-        self.animate_snakes_complete = None
 
     def calculate_square_size(self):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
@@ -56,18 +55,37 @@ class DisplayBoard:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         for col in range(self.y_board):
             for row in range(self.x_board):
-                # self.test_draw_board(col, row)
                 square_rect = pygame.Rect((col * self.square_size) + self.border_size,
                                           ((self.x_board - row - 1) * self.square_size) + self.border_size,
                                           self.square_size,
                                           self.square_size
                                           )
-                square_color = GameColors.WHITE_SMOKE if (row + col) % 2 == 0 else GameColors.SILVER
+                square_color = GameColors.WHITE_SMOKE.value if (row + col) % 2 == 0 else GameColors.SILVER.value
 
                 square_number = self.get_square_number(row, col)
 
                 self.square_rects[square_number] = square_rect
                 self.square_colors[square_number] = square_color
+
+    def generate_start_squares(self):
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        for player_num in range(self.num_players):
+            if player_num % 2 == 0:
+                color = GameColors.WHITE_SMOKE.value
+            else:
+                color = GameColors.SILVER.value
+            start_top, start_left = self.get_topleft_start_square(player_num)
+            square = pygame.Rect(start_left,
+                                 start_top,
+                                 self.square_size,
+                                 self.square_size)
+            self.start_rects[player_num] = square
+            self.start_colors[player_num] = color
+
+    def get_topleft_start_square(self, num) -> tuple[float, float]:
+        top = self.border_size + (self.y_board * self.square_size) + ((self.border_size - self.square_size) / 2)
+        left = self.border_size + (self.square_size * num)
+        return top, left
 
     def get_square_number(self, row, col):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
@@ -81,7 +99,7 @@ class DisplayBoard:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         for square_number in self.square_rects.keys():
             pygame.draw.rect(self.game_area,
-                             self.square_colors[square_number].value,
+                             self.square_colors[square_number],
                              self.square_rects[square_number])
             text = self.font.render(str(square_number), True, GameColors.BLACK.value)
             text_rect = text.get_rect()
@@ -92,15 +110,13 @@ class DisplayBoard:
 
     def draw_board_animated(self) -> Iterator[tuple[str, bool]]:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
-        self.game_area.fill(GameColors.BLACK.value)
-        self.drawing_complete = False
 
         # When I generate the square rects dictionary, it goes by col then row
         # I want to animate the board in order of squares, so I sorted the dictionary keys
         sorted_square_rects = sorted(self.square_rects.keys())
         for square_number in sorted_square_rects:
             pygame.draw.rect(self.game_area,
-                             self.square_colors[square_number].value,
+                             self.square_colors[square_number],
                              self.square_rects[square_number])
             text = self.font.render(str(square_number), True, GameColors.BLACK.value)
             text_rect = text.get_rect()
@@ -109,8 +125,21 @@ class DisplayBoard:
             self.game_area.blit(text, text_rect)
             self.draw_to_window()
             yield "squares", False
-        self.animate_squares_complete = True
         yield "squares", True
+
+    def draw_start_animated(self):
+        for player_num in self.start_rects.keys():
+            pygame.draw.rect(self.game_area,
+                             self.start_colors[player_num],
+                             self.start_rects[player_num])
+            text = self.font.render("P" + (str(player_num + 1)), True, GameColors.BLACK.value)
+            text_rect = text.get_rect()
+            text_rect.center = self.start_rects[player_num].center
+
+            self.game_area.blit(text, text_rect)
+            self.draw_to_window()
+            yield "start", False
+        yield "start", True
 
     def draw_ladders(self) -> Iterator[tuple[str, bool]]:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
@@ -119,15 +148,14 @@ class DisplayBoard:
             end = self.square_rects[ladder[1]].center
             arrow_width = self.get_arrow_width(ladder[0], ladder[1])
             pygame.draw.line(self.game_area,
-                             self.ladder_color,
+                             GameColors.HOOKER_GREEN.value,
                              self.square_rects[ladder[0]].center,
                              self.square_rects[ladder[1]].center,
                              width=arrow_width)
 
-            self.draw_arrow_head(start, end, self.game_area, self.ladder_color)
+            self.draw_arrow_head(start, end, self.game_area, GameColors.HOOKER_GREEN.value)
             self.draw_to_window()
             yield "ladders", False
-        self.animate_ladders_complete = True
         yield "ladders", True
 
     def draw_snakes(self) -> Iterator[tuple[str, bool]]:
@@ -137,15 +165,14 @@ class DisplayBoard:
             end = self.square_rects[snake[1]].center
             arrow_width = self.get_arrow_width(snake[0], snake[1])
             pygame.draw.line(self.game_area,
-                             self.snake_color,
+                             GameColors.REDWOOD.value,
                              self.square_rects[snake[0]].center,
                              self.square_rects[snake[1]].center,
                              width=arrow_width)
 
-            self.draw_arrow_head(start, end, self.game_area, self.snake_color)
+            self.draw_arrow_head(start, end, self.game_area, GameColors.REDWOOD.value)
             self.draw_to_window()
             yield "snakes", False
-        self.animate_ladders_complete = True
         yield "snakes", True
 
     def draw_arrow_head(self, start, end, surface, color):
@@ -171,17 +198,5 @@ class DisplayBoard:
         logger.info(f'Start: {start}, End: {end}, Difference: {end - start}, Width: {width}')
         return width
 
-    def is_drawing_complete(self):
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
-        return self.drawing_complete
-
     def draw_to_window(self):
         self.window.blit(self.game_area, self.game_area.get_rect().topleft)
-
-    def test_draw_board(self, col: int, row: int):
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
-        logger.info(f'Left Square Coord: {col}')
-        logger.info(f'Top Square Coord: {self.x_board - row - 1}')
-        logger.info(f'Current col, row {col}, {row}')
-
-
