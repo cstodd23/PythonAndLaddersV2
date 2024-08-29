@@ -192,7 +192,8 @@ def start_square_mover_animation_test():
 
     pygame.quit()
 
-def start_animation():
+
+def button_test():
     pygame.init()
     clock = pygame.time.Clock()
 
@@ -201,10 +202,16 @@ def start_animation():
 
     display_board = DisplayBoard(board, window)
     display_board.generate_start_squares()
+    display_board.generate_buttons()
+    display_board.calculate_controls_area()
     display_board.generate_board_squares()
 
     combined_animation = chain_generators(
-        display_board.draw_start_animated()
+        display_board.draw_start_animated(),
+        display_board.draw_buttons(),
+        display_board.draw_board_animated(),
+        display_board.draw_ladders(),
+        display_board.draw_snakes()
     )
 
     pygame.time.set_timer(pygame.USEREVENT, ANIMATION_TIME)
@@ -221,6 +228,7 @@ def start_animation():
                         logger.info(f'{current_animation} animation completed')
                 except StopIteration:
                     pygame.time.set_timer(pygame.USEREVENT, 0)
+                # display_board.calculate_button_locs(3)
 
         display_board.draw_to_window()
         pygame.display.flip()
@@ -230,11 +238,11 @@ def start_animation():
     pygame.quit()
 
 
-
 if __name__ == "__main__":
     # test_display_board()
     # test_button_functionality()
     # square_animation_test()
     # square_mover_animation_test()
-    start_square_mover_animation_test()
+    # start_square_mover_animation_test()
     # start_animation()
+    button_test()
