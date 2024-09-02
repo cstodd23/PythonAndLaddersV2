@@ -5,9 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39473745-621f-4839-b0f2-d6c2c62bf72b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/snake_anim_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bezier.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/colors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dice.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game_settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/player.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/animation_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PythonAndLaddersv2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonAndLaddersv2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_board_display.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_board_display.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_logic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snake_anim_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/snake_anim_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,12 +43,12 @@
     &quot;assignee&quot;: &quot;cstodd23&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/cstodd23/PythonAndLaddersV2.git",
-    "accountId": "880f9239-1987-470a-8cb5-a564851e7637"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cstodd23/PythonAndLaddersV2.git&quot;,
+    &quot;accountId&quot;: &quot;880f9239-1987-470a-8cb5-a564851e7637&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -50,23 +62,52 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Docker.pyLadders.executor": "Run",
+    "Python.animation_test.executor": "Debug",
+    "Python.bezier.executor": "Run",
     "Python.board_display.executor": "Run",
     "Python.game_board.executor": "Run",
     "Python.game_board_display.executor": "Run",
     "Python.game_logic.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.player.executor": "Run",
     "Python.snake_anim_test.executor": "Run",
     "Python.tests.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/cstod/OneDrive/PycharmProjects/PythonAndLaddersv2",
-    "settings.editor.selected.configurable": "configurable.group.editor"
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "E:/game_dev/PythonAndLaddersV2",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="PythonAndLaddersv2" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="PythonAndLaddersv2" />
+      </console-settings>
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Game Development\PythonAndLaddersV2" />
       <recent name="C:\Users\cstod\OneDrive\PycharmProjects\PythonAndLaddersv2" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\game_dev\PythonAndLaddersV2\tests" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="pyLadders" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="pyladders_latest" />
+          <option name="containerName" value="pyLadders" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -145,5 +186,26 @@
     <MESSAGE value="Display Board class now can do basic animation for ladders and snakes.  Added variables widths to reflect the distance of the snake or ladder.&#10;Version tests are currently stable." />
     <MESSAGE value="Display Board class now can do basic animation for the start squares, correctly loaded.&#10;Things that may need work: Snakes and Ladders arrow shaft go past head, shows when the arrow shaft is larger&#10;Snakes and Ladders that overlap and are contained in one row/col will obscure where each is starting." />
     <option name="LAST_COMMIT_MESSAGE" value="Display Board class now can do basic animation for the start squares, correctly loaded.&#10;Things that may need work: Snakes and Ladders arrow shaft go past head, shows when the arrow shaft is larger&#10;Snakes and Ladders that overlap and are contained in one row/col will obscure where each is starting." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/bezier.py</url>
+          <line>46</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/bezier.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self.max_vector_length" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

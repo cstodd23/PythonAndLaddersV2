@@ -25,6 +25,7 @@ class Button:
         self.font = pygame.font.Font(None, font_size)
         self.text_surface = self.font.render(text, True, self.text_color.value)
         self.text_rect = self.text_surface.get_rect(center=self.rect.center)
+        self.click_count = 0
 
     def draw(self, screen: pygame.Surface) -> None:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
@@ -36,6 +37,7 @@ class Button:
 
     def is_clicked(self, pos: tuple[int, int]) -> bool:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        self.click_count += 1
         return self.rect.collidepoint(pos)
 
     def set_text(self, new_text: str) -> None:
@@ -49,3 +51,9 @@ class Button:
         self.color = button_color
         self.text_color = text_color
         self.text_surface = self.font.render(self.text, True, self.text_color.value)
+
+    def get_button_info(self):
+        print(f'text: {self.text}')
+        print(f'rect size: {self.rect.size}')
+        print(f'rect center: {self.rect.center}')
+        print(f'button clicks: {self.click_count}')

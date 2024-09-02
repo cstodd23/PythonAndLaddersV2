@@ -1,6 +1,6 @@
 import pygame
 from enum import Enum
-import game_board
+from game_board import GameBoard
 
 # Logger Imports and Setup
 from logger_setup import func_logger, logger

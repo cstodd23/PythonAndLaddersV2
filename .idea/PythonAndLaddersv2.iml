@@ -5,8 +5,9 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/312.venv" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/pyLadders.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (PythonAndLaddersV2)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (PythonAndLaddersV2) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

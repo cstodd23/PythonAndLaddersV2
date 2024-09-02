@@ -3,6 +3,7 @@ import math
 
 import button
 from colors import GameColors
+from game_settings import GameSettings
 from game_board import GameBoard
 from button import Button
 
@@ -30,12 +31,16 @@ class DisplayBoard:
         self.window = window
         self.window_width, self.window_height = window.get_size()
         self.game_area = pygame.Surface((self.window_width, self.window_height))
+        self.player_area = pygame.Surface((self.window_width, self.window_height), pygame.SRCALPHA)
 
         self.num_players = num_players
 
         self.border_squares = border_squares
+        self.calculate_square_size()
 
-        self.square_size = self.calculate_square_size()
+        # Need to change all the dimentions that can change with window size to reference the
+        # GameSettings class, that way if they are updated, the game will scale.
+        self.square_size = GameSettings.SQUARE_SIZE
         self.border_size = self.square_size * border_squares
 
         self.start_rects = {}
@@ -62,6 +67,7 @@ class DisplayBoard:
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         base_length = min(self.window_width, self.window_height)
         square_size = int(base_length / (min(self.x_board, self.y_board) + (self.border_squares * 2)))
+        GameSettings.SQUARE_SIZE = square_size
         return square_size
 
     def generate_board_squares(self):
@@ -223,7 +229,7 @@ class DisplayBoard:
         )
         self.controls_area = controls_rect
 
-    def generate_buttons(self, buttons_info: list = [("Roll", GameColors.ENGLISH_VIOLET), ("Skip Roll", GameColors.PRUSSIAN_BLUE), ("Keep Roll", GameColors.EBONY)]):
+    def generate_buttons(self, buttons_info: list = [("ROLL", GameColors.ENGLISH_VIOLET), ("SKIP ROLL", GameColors.PRUSSIAN_BLUE), ("KEEP ROLL", GameColors.EBONY)]):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         self.calculate_controls_area()
         buttons = {}
@@ -249,5 +255,7 @@ class DisplayBoard:
         yield 'buttons', True
 
     def draw_to_window(self):
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        logger.info("Running in game loop, must not differ")
+        # self.player_area.fill((0, 0, 0, 0))
         self.window.blit(self.game_area, self.game_area.get_rect().topleft)
+        self.window.blit(self.player_area, self.player_area.get_rect().topleft)

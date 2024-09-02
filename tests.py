@@ -107,12 +107,6 @@ def square_animation_test():
     pygame.quit()
 
 
-def chain_generators(*generators: Iterator[tuple[str, bool]]) -> Iterator[tuple[str, bool]]:
-    logger.debug(f"Currently in chain_generators function")
-    for gen in generators:
-        yield from gen
-
-
 def square_mover_animation_test():
     pygame.init()
     clock = pygame.time.Clock()
@@ -201,10 +195,7 @@ def button_test():
     board = GameBoard()
 
     display_board = DisplayBoard(board, window)
-    display_board.generate_start_squares()
-    display_board.generate_buttons()
-    display_board.calculate_controls_area()
-    display_board.generate_board_squares()
+    display_board.board_setup()
 
     combined_animation = chain_generators(
         display_board.draw_start_animated(),
@@ -228,7 +219,6 @@ def button_test():
                         logger.info(f'{current_animation} animation completed')
                 except StopIteration:
                     pygame.time.set_timer(pygame.USEREVENT, 0)
-                # display_board.calculate_button_locs(3)
 
         display_board.draw_to_window()
         pygame.display.flip()
@@ -238,6 +228,55 @@ def button_test():
     pygame.quit()
 
 
+def player_animation_test():
+    pygame.init()
+    clock = pygame.time.Clock()
+
+    window = pygame.display.set_mode((1500, 1500))
+    board = GameBoard()
+    display_board = DisplayBoard(board, window)
+
+    display_board.board_setup()
+
+    combined_animation = chain_generators(
+        display_board.draw_start_animated(),
+        display_board.draw_buttons(),
+        display_board.draw_board_animated(),
+        display_board.draw_ladders(),
+        display_board.draw_snakes()
+    )
+
+    pygame.time.set_timer(pygame.USEREVENT, ANIMATION_TIME)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.USEREVENT:
+                try:
+                    current_animation, is_complete = next(combined_animation)
+                    if is_complete:
+                        logger.info(f'{current_animation} animation completed')
+                except StopIteration:
+                    pygame.time.set_timer(pygame.USEREVENT, 0)
+
+            print(event)
+
+        display_board.draw_to_window()
+        pygame.display.flip()
+
+        clock.tick(60)
+
+    pygame.quit()
+
+
+def chain_generators(*generators: Iterator[tuple[str, bool]]) -> Iterator[tuple[str, bool]]:
+    logger.debug(f"Currently in chain_generators function")
+    for gen in generators:
+        yield from gen
+
+
 if __name__ == "__main__":
     # test_display_board()
     # test_button_functionality()
@@ -245,4 +284,5 @@ if __name__ == "__main__":
     # square_mover_animation_test()
     # start_square_mover_animation_test()
     # start_animation()
-    button_test()
+    # button_test()
+    player_animation_test()
