@@ -5,22 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39473745-621f-4839-b0f2-d6c2c62bf72b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bezier.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/colors.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dice.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game_settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/player.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/animation_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PythonAndLaddersv2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonAndLaddersv2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_board_display.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_board_display.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/snake_anim_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/snake_anim_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bezier.py" beforeDir="false" afterPath="$PROJECT_DIR$/bezier.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +49,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Docker.pyLadders.executor": "Run",
-    "Python.animation_test.executor": "Debug",
+    "Python.animation_test.executor": "Run",
     "Python.bezier.executor": "Run",
     "Python.board_display.executor": "Run",
     "Python.game_board.executor": "Run",
@@ -160,7 +146,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724872580854</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="bezier and player classes are now drawing correctly (for them most part) with movement that is desirable&#10;Current version has the sprite image persisting to track the path, need to turn that off in the next update&#10;Wanted to push this up to have a stable version where the player moves where I want, how fast I want, and without Buggs.">
+      <option name="closed" value="true" />
+      <created>1725304986897</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725304986897</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -185,23 +179,10 @@
     <MESSAGE value="Displaying Board Squares with test scripts to show board&#10;Also animated the board creation with test scripts" />
     <MESSAGE value="Display Board class now can do basic animation for ladders and snakes.  Added variables widths to reflect the distance of the snake or ladder.&#10;Version tests are currently stable." />
     <MESSAGE value="Display Board class now can do basic animation for the start squares, correctly loaded.&#10;Things that may need work: Snakes and Ladders arrow shaft go past head, shows when the arrow shaft is larger&#10;Snakes and Ladders that overlap and are contained in one row/col will obscure where each is starting." />
-    <option name="LAST_COMMIT_MESSAGE" value="Display Board class now can do basic animation for the start squares, correctly loaded.&#10;Things that may need work: Snakes and Ladders arrow shaft go past head, shows when the arrow shaft is larger&#10;Snakes and Ladders that overlap and are contained in one row/col will obscure where each is starting." />
+    <MESSAGE value="bezier and player classes are now drawing correctly (for them most part) with movement that is desirable&#10;Current version has the sprite image persisting to track the path, need to turn that off in the next update&#10;Wanted to push this up to have a stable version where the player moves where I want, how fast I want, and without Buggs." />
+    <option name="LAST_COMMIT_MESSAGE" value="bezier and player classes are now drawing correctly (for them most part) with movement that is desirable&#10;Current version has the sprite image persisting to track the path, need to turn that off in the next update&#10;Wanted to push this up to have a stable version where the player moves where I want, how fast I want, and without Buggs." />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/bezier.py</url>
-          <line>46</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/bezier.py</url>
-          <line>24</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="self.max_vector_length" />
