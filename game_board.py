@@ -77,21 +77,33 @@ class GameBoard:
         tuple: (mover_type, mover_length, start, end)
         """
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
-        mover_info = (None, None, None, None)
+        mover_info = {"type": None,
+                      "length": None,
+                      "start": None,
+                      "end": None
+                      }
         if self.snakes:
             matching_snake = next((snake for snake in self.snakes if snake[0] == square), None)
             if matching_snake:
                 start, end = matching_snake
                 mover_type = 'Snake'
                 mover_length = end - start
-                mover_info = (mover_type, mover_length, start, end)
+                mover_info = {"type": mover_type,
+                              "length": mover_length,
+                              "start": start,
+                              "end": end
+                              }
         if self.ladders:
             matching_ladder = next((ladder for ladder in self.ladders if ladder[0] == square), None)
             if matching_ladder:
                 start, end = matching_ladder
-                mover_type = 'Snake'
+                mover_type = 'Ladder'
                 mover_length = end - start
-                mover_info = (mover_type, mover_length, start, end)
+                mover_info = {"type": mover_type,
+                              "length": mover_length,
+                              "start": start,
+                              "end": end
+                              }
         return mover_info
 
     def debug_snakes_ladders(self):

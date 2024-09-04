@@ -31,6 +31,7 @@ class DisplayBoard:
         self.window = window
         self.window_width, self.window_height = window.get_size()
         self.game_area = pygame.Surface((self.window_width, self.window_height))
+        self.snakes_ladders_area = pygame.Surface((self.window_width, self.window_height), pygame.SRCALPHA)
         self.player_area = pygame.Surface((self.window_width, self.window_height), pygame.SRCALPHA)
 
         self.num_players = num_players
@@ -57,9 +58,9 @@ class DisplayBoard:
         self.controls_area = None
         self.buttons = None
 
-    def board_setup(self):
+    def board_setup(self, button_info):
         self.generate_start_squares()
-        self.generate_buttons()
+        self.generate_buttons(button_info)
         self.calculate_controls_area()
         self.generate_board_squares()
 
@@ -128,8 +129,6 @@ class DisplayBoard:
     #         pygame.display.flip()
 
     def draw_board_animated(self) -> Iterator[tuple[str, bool]]:
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
-
         # When I generate the square rects dictionary, it goes by col then row
         # I want to animate the board in order of squares, so I sorted the dictionary keys
         sorted_square_rects = sorted(self.square_rects.keys())
@@ -142,7 +141,7 @@ class DisplayBoard:
             text_rect.center = self.square_rects[square_number].center
 
             self.game_area.blit(text, text_rect)
-            self.draw_to_window()
+            # self.draw_to_window()
             yield "squares", False
         yield "squares", True
 
@@ -161,41 +160,38 @@ class DisplayBoard:
         yield "start", True
 
     def draw_ladders(self) -> Iterator[tuple[str, bool]]:
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         for ladder in self.game_board.ladders:
             start = self.square_rects[ladder[0]].center
             end = self.square_rects[ladder[1]].center
             arrow_width = self.get_arrow_width(ladder[0], ladder[1])
-            pygame.draw.line(self.game_area,
-                             GameColors.HOOKER_GREEN.value,
+            pygame.draw.line(self.snakes_ladders_area,
+                             GameColors.OPAQUE_HOOKER_GREEN.value,
                              self.square_rects[ladder[0]].center,
                              self.square_rects[ladder[1]].center,
                              width=arrow_width)
 
-            self.draw_arrow_head(start, end, self.game_area, GameColors.HOOKER_GREEN.value)
+            self.draw_arrow_head(start, end, self.snakes_ladders_area, GameColors.OPAQUE_HOOKER_GREEN.value)
 
             yield "ladders", False
         yield "ladders", True
 
     def draw_snakes(self) -> Iterator[tuple[str, bool]]:
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         for snake in self.game_board.snakes:
             start = self.square_rects[snake[0]].center
             end = self.square_rects[snake[1]].center
             arrow_width = self.get_arrow_width(snake[0], snake[1])
-            pygame.draw.line(self.game_area,
-                             GameColors.REDWOOD.value,
+            pygame.draw.line(self.snakes_ladders_area,
+                             GameColors.OPAQUE_REDWOOD.value,
                              self.square_rects[snake[0]].center,
                              self.square_rects[snake[1]].center,
                              width=arrow_width)
 
-            self.draw_arrow_head(start, end, self.game_area, GameColors.REDWOOD.value)
+            self.draw_arrow_head(start, end, self.snakes_ladders_area, GameColors.OPAQUE_REDWOOD.value)
 
             yield "snakes", False
         yield "snakes", True
 
     def draw_arrow_head(self, start, end, surface, color):
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         dx = end[0] - start[0]
         dy = end[1] - start[1]
 
@@ -213,10 +209,14 @@ class DisplayBoard:
                              (head_clockwise_x, head_clockwise_y)])
 
     def get_arrow_width(self, start, end):
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         width = abs(int(((end - start) / self.game_board.finish_line) * 10)) + 3
-        logger.info(f'Start: {start}, End: {end}, Difference: {end - start}, Width: {width}')
         return width
+
+    def draw_board_instantly(self):
+        list(self.draw_board_animated())
+        list(self.draw_start_animated())
+        list(self.draw_ladders())
+        list(self.draw_snakes())
 
     def calculate_controls_area(self):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
@@ -229,7 +229,7 @@ class DisplayBoard:
         )
         self.controls_area = controls_rect
 
-    def generate_buttons(self, buttons_info: list = [("ROLL", GameColors.ENGLISH_VIOLET), ("SKIP ROLL", GameColors.PRUSSIAN_BLUE), ("KEEP ROLL", GameColors.EBONY)]):
+    def generate_buttons(self, buttons_info: tuple):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         self.calculate_controls_area()
         buttons = {}
@@ -254,8 +254,12 @@ class DisplayBoard:
             yield 'buttons', False
         yield 'buttons', True
 
-    def draw_to_window(self):
+    def draw_to_window(self, player_group):
         logger.info("Running in game loop, must not differ")
-        # self.player_area.fill((0, 0, 0, 0))
+        self.draw_board_instantly()
+        self.player_area.fill((0, 0, 0, 0))
+        player_group.update()
+        player_group.draw(self.player_area)
         self.window.blit(self.game_area, self.game_area.get_rect().topleft)
+        self.window.blit(self.snakes_ladders_area, self.snakes_ladders_area.get_rect().topleft)
         self.window.blit(self.player_area, self.player_area.get_rect().topleft)

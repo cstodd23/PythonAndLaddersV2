@@ -15,7 +15,7 @@ file_name = os.path.basename(file_path)
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, rect: pygame.Rect, num, name):
+    def __init__(self, rect: pygame.Rect, num: int, name: str):
         super().__init__()
         self.rect = rect
         self.num = num
@@ -25,6 +25,11 @@ class Player(pygame.sprite.Sprite):
         self.square = 0
         self.moving = False
         self.bezier = bezier.Bezier()
+
+    def print_info(self):
+        print(f'Name {self.name}')
+        print(f'Number {self.num}')
+        print(f'Square {self.square}')
 
     def set_square(self, square: int):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)

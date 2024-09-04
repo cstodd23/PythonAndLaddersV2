@@ -69,10 +69,8 @@ def player_animation_test():
         else:
             game_state.roll_clickable = True
             game_state.interaction_clickable = True
-        player_group.update()
-        player_group.draw(display_board.player_area)
 
-        display_board.draw_to_window()
+        display_board.draw_to_window(player_group)
         pygame.display.flip()
 
         clock.tick(60)
