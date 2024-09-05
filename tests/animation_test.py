@@ -1,5 +1,5 @@
 from button import Button
-from game_board_display import DisplayBoard
+from game_board_display import GameBoardDisplay
 from game_board import GameBoard
 from dice import Dice
 from game_settings import GameSettings
@@ -28,7 +28,7 @@ def player_animation_test():
 
     window = pygame.display.set_mode((GameSettings.WINDOW_SIZE_X, GameSettings.WINDOW_SIZE_Y))
     board = GameBoard()
-    display_board = DisplayBoard(board, window)
+    display_board = GameBoardDisplay(board, window)
     display_board.board_setup()
 
     dice = Dice()

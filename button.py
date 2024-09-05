@@ -29,7 +29,6 @@ class Button(pygame.rect.Rect):
         self.click_count = 0
 
     def draw(self, screen: pygame.Surface) -> None:
-        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         pygame.draw.rect(screen, self.color.value, self)
 
         border_color = lighten_color(self.color)

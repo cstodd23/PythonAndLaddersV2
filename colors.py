@@ -32,8 +32,8 @@ class GameColors(Enum):
     def rgb(cls, color_name):
         return cls[color_name].value
 
+
 def lighten_color(color: GameColors, amount: float = 0.3) -> tuple:
-    print(color.value)
     r, g, b, o = color.value
     return (
         min(int(r + (255 - r) * amount), 255),
@@ -41,6 +41,7 @@ def lighten_color(color: GameColors, amount: float = 0.3) -> tuple:
         min(int(b + (255 - b) * amount), 255),
         o
     )
+
 
 def darken_color(color: GameColors, amount: float = 0.3) -> tuple:
     r, g, b, o = color.value

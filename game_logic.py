@@ -1,8 +1,9 @@
 import pygame
 from enum import Enum
 from typing import Iterator
+import warnings
 
-from game_board_display import DisplayBoard
+from game_board_display import GameBoardDisplay
 from game_board import GameBoard
 from dice import Dice
 from game_settings import GameSettings
@@ -27,10 +28,11 @@ class GameEvents:
 
 
 class GamePhase(Enum):
-    ANIMATING = 1
-    READY_TO_ROLL = 2
-    MOVER_CHECK = 3
-    ROLL_MADE = 4
+    BOARD_CREATION = 1
+    ANIMATING = 2
+    READY_TO_ROLL = 3
+    MOVER_CHOICE = 4
+    ROLL_MADE = 5
 
 
 class TurnTracker:
@@ -76,6 +78,7 @@ class DisplayedGame:
     def __init__(self, num_players: int, rng_seed: int = None, fps: int = 60):
         pygame.init()
         pygame.time.set_timer(pygame.USEREVENT, GameSettings.ANIMATION_TIME)
+        self.rng_seed = rng_seed
 
         self.clock = pygame.time.Clock()
         self.fps = fps
@@ -90,14 +93,14 @@ class DisplayedGame:
         self.event_system = EventSystem()
         self.game_events = GameEvents()
         self.turn_tracker = TurnTracker(self.num_players)
-        self.current_state = GamePhase.ANIMATING
+        self.current_state = GamePhase.BOARD_CREATION
+        self.dice = Dice(rng_seed=self.rng_seed)
 
-        self.rng_seed = rng_seed
 
         # Need to add a loading in pre-made boards feature to the GameBoard
-        self.game_board = GameBoard()
+        self.game_board = GameBoard(rng_seed=self.rng_seed)
         self.window = pygame.display.set_mode((GameSettings.WINDOW_SIZE_X, GameSettings.WINDOW_SIZE_Y))
-        self.game_board_display = DisplayBoard(self.game_board, self.window)
+        self.game_board_display = GameBoardDisplay(self.game_board, self.window)
         self.game_board_display.board_setup(self.button_info)
 
         self.combined_animation = self.chain_generators(
@@ -111,7 +114,8 @@ class DisplayedGame:
         self.player_group = pygame.sprite.Group()
         self.setup_players()
 
-        self.dice = Dice()
+        self.next_square = None
+        self.mover_info = None
 
         self.running = True
 
@@ -139,7 +143,6 @@ class DisplayedGame:
                 self.player_info[num_player][1]
             )
             self.player_group.add(player)
-        print(self.player_group.sprites())
 
     def run_game(self):
         func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
@@ -158,23 +161,28 @@ class DisplayedGame:
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.handle_mouse_click(event.pos)
+                if self.current_state != GamePhase.BOARD_CREATION:
+                    self.handle_mouse_click(event.pos)
             elif event.type == pygame.USEREVENT:
                 self.handle_user_event()
 
     def handle_mouse_click(self, pos):
+        if any(player.moving for player in self.player_group):
+            self.current_state = GamePhase.ANIMATING
+        elif self.current_state != GamePhase.MOVER_CHOICE:
+            self.current_state = GamePhase.READY_TO_ROLL
         if self.current_state == GamePhase.READY_TO_ROLL:
             if self.game_board_display.buttons["ROLL"].collidepoint(pos):
                 self.event_system.emit(self.game_events.ROLL)
 
-        elif self.current_state == GamePhase.MOVER_CHECK:
+        elif self.current_state == GamePhase.MOVER_CHOICE:
             if self.game_board_display.buttons["SKIP ROLL"].collidepoint(pos):
                 self.event_system.emit(self.game_events.SKIP_ROLL)
             elif self.game_board_display.buttons["KEEP ROLL"].collidepoint(pos):
                 self.event_system.emit(self.game_events.KEEP_ROLL)
 
     def handle_user_event(self):
-        if self.current_state == GamePhase.ANIMATING:
+        if self.current_state == GamePhase.BOARD_CREATION:
             try:
                 current_animation, is_complete = next(self.combined_animation)
                 if is_complete:
@@ -184,45 +192,70 @@ class DisplayedGame:
                 logger.info('Board setup completed')
 
     def update(self):
-        pass
+        self.player_group.update()
 
     def draw(self):
+        self.game_board_display.draw_board_instantly()
         self.game_board_display.draw_to_window(self.player_group)
         pygame.display.flip()
 
     def on_roll(self, data):
-        print("Roll Button Clicked!")
-        player_num = self.turn_tracker.get_current_player()
-        sprite = self.get_sprite(player_num)
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        logger.info("Roll Button Clicked!")
+        player = self.get_player(self.turn_tracker.get_current_player())
         roll = self.dice.roll()
-        next_square = roll + sprite.square
-        mover_info = self.game_board.check_snakes_ladders(next_square)
-        if mover_info['type']:
-            print(f"Landed on a {mover_info['type']} at {mover_info['start']}")
-            self.current_state = GamePhase.MOVER_CHECK
+        self.next_square = roll + player.square
+        logger.info(f'Roll: {roll}, Next Square: {self.next_square}')
+        self.mover_info = self.game_board.check_snakes_ladders(self.next_square)
+        if self.mover_info['type']:
+            logger.info(f"Landed on a {self.mover_info['type']} at {self.mover_info['start']}")
+            self.current_state = GamePhase.MOVER_CHOICE
+            self.game_board_display.update_board_square(self.next_square, GameColors.ENGLISH_VIOLET.value)
             # Generate Ghost Sprite or Change colors of squares it will land on
+
         else:
-            sprite.set_square(next_square)
-            sprite.set_new_center(self.game_board_display.square_rects[next_square].center)
+            player.set_next_square(self.next_square)
+            player.set_next_center(self.game_board_display.square_rects[self.next_square].center)
+
             self.end_turn()
 
     def on_skip_roll(self, data):
-        print("Skip Roll Button Clicked!")
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        logger.info("Skip Roll Button Clicked!")
+        self.game_board_display.update_board_square(self.next_square, self.game_board_display.square_colors[self.next_square - 2])
+        # remove the highlighted square
+        self.end_turn()
 
     def on_keep_roll(self, data):
-        print("Keep Roll Button Clicked!")
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        logger.info("Keep Roll Button Clicked!")
+        self.game_board_display.update_board_square(self.next_square, self.game_board_display.square_colors[self.next_square - 2])
+        player = self.get_player(self.turn_tracker.get_current_player())
+        player.set_next_square(self.next_square)
+        player.set_next_center(self.game_board_display.square_rects[self.next_square].center)
+        player.set_snake_ladder_end_square(self.mover_info['end'])
+        player.set_snake_ladder_end_center(self.game_board_display.square_rects[self.mover_info['end']].center)
+
+        self.end_turn()
+        # I believe that the end turn logic needs to be contained in the player at this point....
+        # Probably need to change the on skip roll and on roll functions to match.
 
     def end_turn(self):
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        self.next_square = None
+        self.mover_info = None
+        self.current_state = GamePhase.ANIMATING
         self.turn_tracker.next_turn()
-        self.current_state = GamePhase.READY_TO_ROLL
 
     def cleanup(self):
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         pygame.quit()
 
     def quit_game(self):
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         self.running = False
 
-    def get_sprite(self, player_num: int) -> Player:
+    def get_player(self, player_num: int):
         for sprite in self.player_group:
             if getattr(sprite, 'num') == player_num:
                 return sprite

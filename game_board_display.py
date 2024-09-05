@@ -17,7 +17,7 @@ file_path = __file__
 file_name = os.path.basename(file_path)
 
 
-class DisplayBoard:
+class GameBoardDisplay:
     def __init__(self,
                  game_board: GameBoard,
                  window: pygame.display,
@@ -103,6 +103,7 @@ class DisplayBoard:
             self.start_colors[player_num] = color
 
     def get_topleft_start_square(self, num) -> tuple[float, float]:
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
         top = self.border_size + (self.y_board * self.square_size) + ((self.border_size - self.square_size) / 2)
         left = self.border_size + (self.square_size * num)
         return top, left
@@ -114,19 +115,6 @@ class DisplayBoard:
         else:
             square_number = (row * self.x_board) + 10 - col
         return square_number
-
-    # def draw_board(self):
-    #     func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
-    #     for square_number in self.square_rects.keys():
-    #         pygame.draw.rect(self.game_area,
-    #                          self.square_colors[square_number],
-    #                          self.square_rects[square_number])
-    #         text = self.font.render(str(square_number), True, GameColors.BLACK.value)
-    #         text_rect = text.get_rect()
-    #         text_rect.center = self.square_rects[square_number].center
-    #
-    #         self.game_area.blit(text, text_rect)
-    #         pygame.display.flip()
 
     def draw_board_animated(self) -> Iterator[tuple[str, bool]]:
         # When I generate the square rects dictionary, it goes by col then row
@@ -144,6 +132,10 @@ class DisplayBoard:
             # self.draw_to_window()
             yield "squares", False
         yield "squares", True
+
+    def update_board_square(self, square, color):
+        func_logger(file_name, self.__class__.__name__, inspect.currentframe().f_code.co_name)
+        self.square_colors[square] = color
 
     def draw_start_animated(self):
         for player_num in self.start_rects.keys():
@@ -213,7 +205,10 @@ class DisplayBoard:
         return width
 
     def draw_board_instantly(self):
+        self.game_area.fill((0, 0, 0, 0))
+        self.snakes_ladders_area.fill((0, 0, 0, 0))
         list(self.draw_board_animated())
+        list(self.draw_buttons())
         list(self.draw_start_animated())
         list(self.draw_ladders())
         list(self.draw_snakes())
@@ -235,7 +230,6 @@ class DisplayBoard:
         buttons = {}
         i = 0
         for button_info in buttons_info:
-            print(f'Calculation i({i}) * 0.25 + 0.125 = {0.125 + (i * 0.25)}')
             button_rect = pygame.Rect(
                 (self.controls_area.width * (0.125 + (i * 0.25))) + self.controls_area.x,
                 (self.controls_area.height * 0.25) + self.controls_area.y,
@@ -248,7 +242,6 @@ class DisplayBoard:
         self.buttons = buttons
 
     def draw_buttons(self):
-        print(self.buttons.values())
         for butt in self.buttons.values():
             butt.draw(self.game_area)
             yield 'buttons', False
@@ -256,9 +249,7 @@ class DisplayBoard:
 
     def draw_to_window(self, player_group):
         logger.info("Running in game loop, must not differ")
-        self.draw_board_instantly()
         self.player_area.fill((0, 0, 0, 0))
-        player_group.update()
         player_group.draw(self.player_area)
         self.window.blit(self.game_area, self.game_area.get_rect().topleft)
         self.window.blit(self.snakes_ladders_area, self.snakes_ladders_area.get_rect().topleft)

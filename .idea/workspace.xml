@@ -5,16 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39473745-621f-4839-b0f2-d6c2c62bf72b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/scratch0.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/spinner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/button.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/colors.py" beforeDir="false" afterPath="$PROJECT_DIR$/colors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_board.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dice.py" beforeDir="false" afterPath="$PROJECT_DIR$/dice.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_board_display.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_board_display.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/game_settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/animation_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/animation_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,6 +91,7 @@
       <recent name="C:\Users\cstod\OneDrive\PycharmProjects\PythonAndLaddersv2" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\game_dev\PythonAndLaddersV2\logger" />
       <recent name="E:\game_dev\PythonAndLaddersV2\tests" />
     </key>
   </component>
@@ -228,7 +229,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725327868531</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Moved the testing structure that worked to my game logic file, game loop has turns and basic movement working.  Got carried away with opacity on the snakes and ladders and almost killed game_board_display.  Needed to commit with the changes that were working before I go on that tangent.&#10;&#10;Next steps will be allowing the squares to be highlighted to show when a player has a choice between keeping a roll or skipping a roll.&#10;&#10;Also need the players to move along the snakes and ladders if they choose to do so.">
+      <option name="closed" value="true" />
+      <created>1725420889706</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1725420889706</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -255,12 +264,14 @@
     <MESSAGE value="Display Board class now can do basic animation for the start squares, correctly loaded.&#10;Things that may need work: Snakes and Ladders arrow shaft go past head, shows when the arrow shaft is larger&#10;Snakes and Ladders that overlap and are contained in one row/col will obscure where each is starting." />
     <MESSAGE value="bezier and player classes are now drawing correctly (for them most part) with movement that is desirable&#10;Current version has the sprite image persisting to track the path, need to turn that off in the next update&#10;Wanted to push this up to have a stable version where the player moves where I want, how fast I want, and without Buggs." />
     <MESSAGE value="Updated Bezier one last time, now it should work amazing.  No inconsistencies I think." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Bezier one last time, now it should work amazing.  No inconsistencies I think." />
+    <MESSAGE value="Moved the testing structure that worked to my game logic file, game loop has turns and basic movement working.  Got carried away with opacity on the snakes and ladders and almost killed game_board_display.  Needed to commit with the changes that were working before I go on that tangent.&#10;&#10;Next steps will be allowing the squares to be highlighted to show when a player has a choice between keeping a roll or skipping a roll.&#10;&#10;Also need the players to move along the snakes and ladders if they choose to do so." />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved the testing structure that worked to my game logic file, game loop has turns and basic movement working.  Got carried away with opacity on the snakes and ladders and almost killed game_board_display.  Needed to commit with the changes that were working before I go on that tangent.&#10;&#10;Next steps will be allowing the squares to be highlighted to show when a player has a choice between keeping a roll or skipping a roll.&#10;&#10;Also need the players to move along the snakes and ladders if they choose to do so." />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="self.max_vector_length" />
+        <watch expression="self.max_vector_length" language="Python" />
+        <watch expression="self" />
       </configuration>
     </watches-manager>
   </component>
