@@ -58,6 +58,24 @@ class GameBoardDisplay:
         self.controls_area = None
         self.buttons = None
 
+    @staticmethod
+    def pixelate(surface, pixel_size):
+        # Get the dimensions of the original surface
+        width = surface.get_width()
+        height = surface.get_height()
+
+        # Calculate the new dimensions
+        new_width = width // pixel_size
+        new_height = height // pixel_size
+
+        # Create a new surface with reduced size
+        small_surface = pygame.transform.scale(surface, (new_width, new_height))
+
+        # Scale it back up to the original size
+        pixelated = pygame.transform.scale(small_surface, (width, height))
+
+        return pixelated
+
     def board_setup(self, button_info):
         self.generate_start_squares()
         self.generate_buttons(button_info)
@@ -254,3 +272,7 @@ class GameBoardDisplay:
         self.window.blit(self.game_area, self.game_area.get_rect().topleft)
         self.window.blit(self.snakes_ladders_area, self.snakes_ladders_area.get_rect().topleft)
         self.window.blit(self.player_area, self.player_area.get_rect().topleft)
+        # window_copy = self.window.copy()
+        # pixelated_window = self.pixelate(window_copy, 1.5)
+        # self.window.blit(pixelated_window, (0,0))
+
